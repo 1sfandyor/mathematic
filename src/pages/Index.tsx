@@ -84,14 +84,26 @@ const Index = () => {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TRAINING_ZONES.map(zone => <TrainingZoneCard key={zone.id} zone={zone} />)}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Ko'paytirish row - 3 cards */}
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {TRAINING_ZONES.filter(z => z.category === 'multiplication').map(zone => (
+                <TrainingZoneCard key={zone.id} zone={zone} />
+              ))}
+            </div>
+            
+            {/* Quick Training - vertical card spanning 2 rows */}
+            <div className="lg:row-span-2">
+              <QuickTrainingCard vertical />
+            </div>
+            
+            {/* Bo'lish row - 3 cards */}
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {TRAINING_ZONES.filter(z => z.category === 'division').map(zone => (
+                <TrainingZoneCard key={zone.id} zone={zone} />
+              ))}
+            </div>
           </div>
-        </div>
-
-        {/* Quick Training */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <QuickTrainingCard />
         </div>
       </div>
     </MainLayout>;
