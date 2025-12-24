@@ -12,9 +12,29 @@ const Index = () => {
   const accuracy = Math.round(MOCK_USER.correctAnswers / MOCK_USER.totalQuestions * 100);
   return <MainLayout>
       <div className="flex flex-col gap-8">
+        {/* Greeting Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 p-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-yellow-400 text-3xl">☀️</span>
+              <span className="text-text-sub font-bold uppercase tracking-wider text-sm">Xayrli kun</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
+              Matematikaga tayyor, <span className="text-primary underline decoration-4 underline-offset-4 decoration-foreground/10">{MOCK_USER.firstName}?</span>
+            </h1>
+            <p className="text-text-sub text-lg font-medium mt-1">
+              Bugun rekordingizni yangilash uchun <span className="text-yellow-500 font-bold">5 ta yulduz</span> yig'ishingiz kerak!
+            </p>
+          </div>
+          <button className="bg-card border-2 border-primary text-foreground font-bold py-3 px-6 rounded-xl hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2 shadow-sm">
+            <Flame className="size-5" />
+            Kunlik Blitz
+          </button>
+        </div>
+
         {/* Hero Section - Challenge + Leaderboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div className="md:col-span-3 lg:col-span-2 my-[157px]">
+          <div className="md:col-span-3 lg:col-span-2">
             <ChallengeCard title="Apex Musobaqa: Tezkor Tenglamalar" description="Chaqmoq tezligi va mukammal aniqlik bilan reytingda yetakchilik qiling. Har 24 soatda yangi musobaqa." timeRemaining="04:32:18" />
           </div>
           
