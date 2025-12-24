@@ -54,8 +54,9 @@ const Index = () => {
 
         {/* Hero Section - Challenge + Leaderboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div className="md:col-span-3 lg:col-span-2">
+          <div className="md:col-span-3 lg:col-span-2 flex flex-col gap-6">
             <ChallengeCard title="Apex Musobaqa: Tezkor Tenglamalar" description="Chaqmoq tezligi va mukammal aniqlik bilan reytingda yetakchilik qiling. Har 24 soatda yangi musobaqa." timeRemaining="04:32:18" />
+            <AchievementsSection />
           </div>
           
           <div className="md:col-span-3 lg:col-span-2">
@@ -88,14 +89,9 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Achievements + Quick Training */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-2">
-            <AchievementsSection />
-          </div>
-          <div className="lg:col-span-2">
-            <QuickTrainingCard />
-          </div>
+        {/* Quick Training */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <QuickTrainingCard />
         </div>
       </div>
     </MainLayout>;
