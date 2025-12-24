@@ -5,19 +5,36 @@ import { StatCard } from '@/components/dashboard/StatCard';
 import { TrainingZoneCard } from '@/components/dashboard/TrainingZoneCard';
 import { AchievementsSection } from '@/components/dashboard/AchievementsSection';
 import { QuickTrainingCard } from '@/components/dashboard/QuickTrainingCard';
-import { Flame, Star, Target, Medal, TrendingUp } from 'lucide-react';
+import { Flame, Star, Target, Medal, TrendingUp, Sun, Sunset, Moon } from 'lucide-react';
 import { MOCK_USER, MOCK_LEADERBOARD, TRAINING_ZONES } from '@/lib/constants';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return { text: 'Xayrli tong', icon: Sun, color: 'text-yellow-400' };
+  } else if (hour >= 12 && hour < 18) {
+    return { text: 'Xayrli kun', icon: Sun, color: 'text-yellow-400' };
+  } else if (hour >= 18 && hour < 21) {
+    return { text: 'Xayrli kech', icon: Sunset, color: 'text-orange-400' };
+  } else {
+    return { text: 'Xayrli tun', icon: Moon, color: 'text-indigo-400' };
+  }
+};
+
 const Index = () => {
+  const navigate = useNavigate();
   const accuracy = Math.round(MOCK_USER.correctAnswers / MOCK_USER.totalQuestions * 100);
+  const greeting = getGreeting();
+  const GreetingIcon = greeting.icon;
   return <MainLayout>
       <div className="flex flex-col gap-8">
         {/* Greeting Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 p-4">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-yellow-400 text-3xl">☀️</span>
-              <span className="text-text-sub font-bold uppercase tracking-wider text-sm">Xayrli kun</span>
+              <GreetingIcon className={`size-8 ${greeting.color}`} />
+              <span className="text-text-sub font-bold uppercase tracking-wider text-sm">{greeting.text}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
               Matematikaga tayyor, <span className="text-primary underline decoration-4 underline-offset-4 decoration-foreground/10">{MOCK_USER.firstName}?</span>
@@ -26,7 +43,10 @@ const Index = () => {
               Bugun rekordingizni yangilash uchun <span className="text-yellow-500 font-bold">5 ta yulduz</span> yig'ishingiz kerak!
             </p>
           </div>
-          <button className="bg-card border-2 border-primary text-foreground font-bold py-3 px-6 rounded-xl hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2 shadow-sm">
+          <button 
+            onClick={() => navigate('/practice?mode=blitz')}
+            className="bg-card border-2 border-primary text-foreground font-bold py-3 px-6 rounded-xl hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2 shadow-sm"
+          >
             <Flame className="size-5" />
             Kunlik Blitz
           </button>
