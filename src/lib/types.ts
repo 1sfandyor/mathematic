@@ -60,6 +60,8 @@ export interface TrainingZone {
   color: 'green' | 'blue' | 'red' | 'gray';
   progress: number;
   status: 'mastered' | 'in-progress' | 'next-up' | 'locked';
+  category: 'addition' | 'subtraction' | 'multiplication' | 'division';
+  requiredLevel: number;
 }
 
 export interface Achievement {

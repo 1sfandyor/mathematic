@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 interface TrainingZoneCardProps {
   zone: TrainingZone;
+  showLevelInfo?: boolean;
 }
 
 const iconMap = {
@@ -48,11 +49,12 @@ const statusLabels = {
   locked: { text: "Qulflangan", icon: Lock },
 };
 
-export function TrainingZoneCard({ zone }: TrainingZoneCardProps) {
+export function TrainingZoneCard({ zone, showLevelInfo = false }: TrainingZoneCardProps) {
   const Icon = iconMap[zone.icon as keyof typeof iconMap] || Plus;
   const colors = colorMap[zone.color];
   const status = statusLabels[zone.status];
   const isLocked = zone.status === 'locked';
+  const requiredLevel = zone.requiredLevel;
 
   const content = (
     <div 
@@ -89,6 +91,15 @@ export function TrainingZoneCard({ zone }: TrainingZoneCardProps) {
       </h3>
       
       <p className="text-text-sub text-sm mb-4">{zone.description}</p>
+      
+      {showLevelInfo && (
+        <p className={cn(
+          "text-xs font-bold mb-3 uppercase",
+          isLocked ? "text-muted-foreground" : "text-primary"
+        )}>
+          {isLocked ? `${requiredLevel}-daraja kerak` : `${requiredLevel}-daraja`}
+        </p>
+      )}
       
       <div className="w-full bg-muted rounded-full h-2">
         <div 
