@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { generateProblem, generateSequentialProblem, calculateXP } from '@/lib/mathUtils';
-import { MOCK_USER, QUESTIONS_PER_SESSION, SPEED_CONFIG } from '@/lib/constants';
-import { Check, X, ArrowRight, Home, RotateCcw, Zap, Trophy, Target, Flame } from 'lucide-react';
+import { MOCK_USER, QUESTIONS_PER_SESSION, SPEED_CONFIG, BLITZ_TIME_LIMIT } from '@/lib/constants';
+import { Check, X, ArrowRight, Home, RotateCcw, Zap, Trophy, Target, Flame, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -45,6 +45,7 @@ export default function PracticePage() {
     xp: 0,
   });
   const [hasAutoStarted, setHasAutoStarted] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(BLITZ_TIME_LIMIT);
 
   const generateNewProblem = useCallback(() => {
     if (questionType === 'oddiy') {
@@ -62,6 +63,7 @@ export default function PracticePage() {
   const startGame = useCallback(() => {
     setCurrentQuestion(0);
     setStats({ correct: 0, incorrect: 0, combo: 0, longestCombo: 0, xp: 0 });
+    setTimeRemaining(BLITZ_TIME_LIMIT);
     generateNewProblem();
     
     if (questionType === 'ketma-ket') {
@@ -70,6 +72,26 @@ export default function PracticePage() {
       setGameState('playing');
     }
   }, [questionType, generateNewProblem]);
+
+  // Blitz mode timer
+  useEffect(() => {
+    if (!isBlitzMode) return;
+    if (gameState !== 'playing' && gameState !== 'feedback' && gameState !== 'waiting-answer') return;
+    
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setGameState('results');
+          toast.error("Vaqt tugadi! ⏰");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isBlitzMode, gameState]);
 
   // Auto-start for blitz mode
   useEffect(() => {
@@ -154,6 +176,12 @@ export default function PracticePage() {
     ? Math.round((stats.correct / (stats.correct + stats.incorrect)) * 100) 
     : 0;
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <MainLayout hideFooter>
       <div className="min-h-[calc(100vh-200px)] flex items-center justify-center">
@@ -230,12 +258,23 @@ export default function PracticePage() {
               <span className="text-sm font-bold text-text-sub uppercase">
                 Misol {currentQuestion + 1} / {QUESTIONS_PER_SESSION}
               </span>
-              <div className="flex items-center gap-2">
-                <Flame className={cn(
-                  "size-5",
-                  stats.combo > 0 ? "text-category-orange" : "text-muted-foreground"
-                )} />
-                <span className="font-bold">{stats.combo}x</span>
+              <div className="flex items-center gap-4">
+                {isBlitzMode && (
+                  <div className={cn(
+                    "flex items-center gap-1 px-3 py-1 rounded-full font-bold text-sm",
+                    timeRemaining <= 10 ? "bg-destructive/20 text-destructive animate-pulse" : "bg-primary/20 text-primary"
+                  )}>
+                    <Clock className="size-4" />
+                    {formatTime(timeRemaining)}
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Flame className={cn(
+                    "size-5",
+                    stats.combo > 0 ? "text-category-orange" : "text-muted-foreground"
+                  )} />
+                  <span className="font-bold">{stats.combo}x</span>
+                </div>
               </div>
             </div>
 
@@ -332,12 +371,23 @@ export default function PracticePage() {
               <span className="text-sm font-bold text-text-sub uppercase">
                 Misol {currentQuestion + 1} / {QUESTIONS_PER_SESSION}
               </span>
-              <div className="flex items-center gap-2">
-                <Flame className={cn(
-                  "size-5",
-                  stats.combo > 0 ? "text-category-orange" : "text-muted-foreground"
-                )} />
-                <span className="font-bold">{stats.combo}x</span>
+              <div className="flex items-center gap-4">
+                {isBlitzMode && (
+                  <div className={cn(
+                    "flex items-center gap-1 px-3 py-1 rounded-full font-bold text-sm",
+                    timeRemaining <= 10 ? "bg-destructive/20 text-destructive animate-pulse" : "bg-primary/20 text-primary"
+                  )}>
+                    <Clock className="size-4" />
+                    {formatTime(timeRemaining)}
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Flame className={cn(
+                    "size-5",
+                    stats.combo > 0 ? "text-category-orange" : "text-muted-foreground"
+                  )} />
+                  <span className="font-bold">{stats.combo}x</span>
+                </div>
               </div>
             </div>
 
