@@ -10,6 +10,7 @@ import { Check, X, ArrowRight, Home, RotateCcw, Zap, Trophy, Target, Flame, Cloc
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
+import { playCorrectSound, playIncorrectSound, triggerHaptic } from '@/lib/sounds';
 
 type GameState = 'ready' | 'playing' | 'showing-term' | 'waiting-answer' | 'feedback' | 'results';
 type QuestionType = 'oddiy' | 'ketma-ket';
@@ -135,7 +136,12 @@ export default function PracticePage() {
     }));
 
     if (correct) {
+      playCorrectSound();
+      triggerHaptic('success');
       toast.success("To'g'ri! 🎉", { duration: 1000 });
+    } else {
+      playIncorrectSound();
+      triggerHaptic('error');
     }
 
     setGameState('feedback');
