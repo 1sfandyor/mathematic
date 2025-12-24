@@ -25,11 +25,12 @@ interface SessionStats {
 
 export default function PracticePage() {
   const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'standard';
+  const mode = searchParams.get('mode');
+  const isBlitzMode = mode === 'blitz';
   
   const [gameState, setGameState] = useState<GameState>('ready');
   const [questionType, setQuestionType] = useState<QuestionType>('oddiy');
-  const [speed, setSpeed] = useState<Speed>('ortacha');
+  const [speed, setSpeed] = useState<Speed>('tez');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [problem, setProblem] = useState<ReturnType<typeof generateProblem> | null>(null);
   const [sequentialProblem, setSequentialProblem] = useState<ReturnType<typeof generateSequentialProblem> | null>(null);
@@ -43,6 +44,7 @@ export default function PracticePage() {
     longestCombo: 0,
     xp: 0,
   });
+  const [hasAutoStarted, setHasAutoStarted] = useState(false);
 
   const generateNewProblem = useCallback(() => {
     if (questionType === 'oddiy') {
@@ -57,7 +59,7 @@ export default function PracticePage() {
     setIsCorrect(null);
   }, [questionType]);
 
-  const startGame = () => {
+  const startGame = useCallback(() => {
     setCurrentQuestion(0);
     setStats({ correct: 0, incorrect: 0, combo: 0, longestCombo: 0, xp: 0 });
     generateNewProblem();
@@ -67,7 +69,15 @@ export default function PracticePage() {
     } else {
       setGameState('playing');
     }
-  };
+  }, [questionType, generateNewProblem]);
+
+  // Auto-start for blitz mode
+  useEffect(() => {
+    if (isBlitzMode && !hasAutoStarted && gameState === 'ready') {
+      setHasAutoStarted(true);
+      startGame();
+    }
+  }, [isBlitzMode, hasAutoStarted, gameState, startGame]);
 
   // Handle sequential term display
   useEffect(() => {
@@ -152,7 +162,7 @@ export default function PracticePage() {
           <Card className="max-w-lg w-full p-8 text-center animate-scale-in">
             <Zap className="size-16 text-primary mx-auto mb-4" />
             <h1 className="text-3xl font-black uppercase tracking-tight mb-2">
-              Mashqni Boshlash
+              {isBlitzMode ? 'Kunlik Blitz' : 'Mashqni Boshlash'}
             </h1>
             <p className="text-text-sub mb-6">
               {QUESTIONS_PER_SESSION} ta misol yechib, ko'nikmalaringizni sinang!
