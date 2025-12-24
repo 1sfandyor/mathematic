@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { generateProblem, generateSequentialProblem, calculateXP } from '@/lib/mathUtils';
-import { MOCK_USER, QUESTIONS_PER_SESSION, SPEED_CONFIG, BLITZ_TIME_LIMIT } from '@/lib/constants';
+import { MOCK_USER, QUESTIONS_PER_SESSION, SPEED_CONFIG, BLITZ_DIFFICULTIES } from '@/lib/constants';
 import { Check, X, ArrowRight, Home, RotateCcw, Zap, Trophy, Target, Flame, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 type GameState = 'ready' | 'playing' | 'showing-term' | 'waiting-answer' | 'feedback' | 'results';
 type QuestionType = 'oddiy' | 'ketma-ket';
 type Speed = 'sekin' | 'ortacha' | 'tez';
+type BlitzDifficulty = 'oson' | 'ortacha' | 'qiyin';
 
 interface SessionStats {
   correct: number;
@@ -45,7 +46,8 @@ export default function PracticePage() {
     xp: 0,
   });
   const [hasAutoStarted, setHasAutoStarted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(BLITZ_TIME_LIMIT);
+  const [blitzDifficulty, setBlitzDifficulty] = useState<BlitzDifficulty>('ortacha');
+  const [timeRemaining, setTimeRemaining] = useState<number>(BLITZ_DIFFICULTIES['ortacha'].time);
 
   const generateNewProblem = useCallback(() => {
     if (questionType === 'oddiy') {
@@ -63,7 +65,7 @@ export default function PracticePage() {
   const startGame = useCallback(() => {
     setCurrentQuestion(0);
     setStats({ correct: 0, incorrect: 0, combo: 0, longestCombo: 0, xp: 0 });
-    setTimeRemaining(BLITZ_TIME_LIMIT);
+    setTimeRemaining(BLITZ_DIFFICULTIES[blitzDifficulty].time);
     generateNewProblem();
     
     if (questionType === 'ketma-ket') {
@@ -71,7 +73,7 @@ export default function PracticePage() {
     } else {
       setGameState('playing');
     }
-  }, [questionType, generateNewProblem]);
+  }, [questionType, generateNewProblem, blitzDifficulty]);
 
   // Blitz mode timer
   useEffect(() => {
@@ -93,13 +95,7 @@ export default function PracticePage() {
     return () => clearInterval(timer);
   }, [isBlitzMode, gameState]);
 
-  // Auto-start for blitz mode
-  useEffect(() => {
-    if (isBlitzMode && !hasAutoStarted && gameState === 'ready') {
-      setHasAutoStarted(true);
-      startGame();
-    }
-  }, [isBlitzMode, hasAutoStarted, gameState, startGame]);
+  // Note: Removed auto-start to allow user to select blitz difficulty
 
   // Handle sequential term display
   useEffect(() => {
@@ -236,6 +232,29 @@ export default function PracticePage() {
                       </Button>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {isBlitzMode && (
+                <div>
+                  <label className="text-sm font-bold uppercase tracking-wide text-text-sub block mb-2">
+                    Qiyinlik Darajasi
+                  </label>
+                  <div className="flex gap-2">
+                    {(Object.keys(BLITZ_DIFFICULTIES) as BlitzDifficulty[]).map((d) => (
+                      <Button
+                        key={d}
+                        variant={blitzDifficulty === d ? 'default' : 'outline'}
+                        className="flex-1"
+                        onClick={() => setBlitzDifficulty(d)}
+                      >
+                        {BLITZ_DIFFICULTIES[d].label}
+                      </Button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-text-sub mt-2">
+                    Vaqt: {BLITZ_DIFFICULTIES[blitzDifficulty].time} soniya
+                  </p>
                 </div>
               )}
             </div>

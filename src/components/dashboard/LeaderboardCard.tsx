@@ -32,7 +32,7 @@ const rankStyles = {
 
 export function LeaderboardCard({ entries, onRefresh }: LeaderboardCardProps) {
   return (
-    <div className="bg-card rounded-3xl p-6 shadow-xl flex flex-col abstract-bg-grid relative overflow-hidden">
+    <div className="bg-card rounded-3xl p-6 shadow-xl flex flex-col abstract-bg-grid relative overflow-hidden h-full">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-30 pointer-events-none" />
       
       <div className="flex items-center justify-between mb-6 relative z-10">
