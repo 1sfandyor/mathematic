@@ -59,7 +59,7 @@ export function TrainingZoneCard({ zone, showLevelInfo = false }: TrainingZoneCa
   const content = (
     <div 
       className={cn(
-        "bg-card p-6 rounded-2xl shadow-sm border border-transparent hover:border-primary/50 transition-all relative overflow-hidden group",
+        "bg-card p-6 rounded-2xl shadow-sm border border-transparent hover:border-primary/50 transition-all relative overflow-hidden group h-full flex flex-col",
         isLocked && "opacity-90",
         !isLocked && "cursor-pointer"
       )}
@@ -90,7 +90,7 @@ export function TrainingZoneCard({ zone, showLevelInfo = false }: TrainingZoneCa
         {zone.title}
       </h3>
       
-      <p className="text-text-sub text-sm mb-4">{zone.description}</p>
+      <p className="text-text-sub text-sm mb-4 flex-1">{zone.description}</p>
       
       {showLevelInfo && (
         <p className={cn(

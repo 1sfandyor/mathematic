@@ -29,7 +29,12 @@ export const LEVEL_TERMS = {
 } as const;
 
 export const QUESTIONS_PER_SESSION = 10;
-export const BLITZ_TIME_LIMIT = 60; // 60 seconds for blitz mode
+export const BLITZ_TIME_LIMIT = 60; // default 60 seconds for blitz mode
+export const BLITZ_DIFFICULTIES = {
+  oson: { label: "🟢 Oson", time: 90 },
+  ortacha: { label: "🟡 O'rtacha", time: 60 },
+  qiyin: { label: "🔴 Qiyin", time: 30 },
+} as const;
 export const LEVEL_UP_THRESHOLD = 0.7; // 70% accuracy needed
 
 export const MOCK_USER = {
