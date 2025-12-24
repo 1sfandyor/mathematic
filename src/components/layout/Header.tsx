@@ -1,4 +1,4 @@
-import { Trophy, LayoutDashboard, Star, Medal, Menu } from 'lucide-react';
+import { Trophy, LayoutDashboard, Star, Medal, Menu, Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,7 @@ const navItems = [
   { path: '/', label: 'Boshqaruv', icon: LayoutDashboard },
   { path: '/achievements', label: 'Yutuqlar', icon: Star },
   { path: '/rankings', label: 'Reyting', icon: Medal },
+  { path: '/search', label: 'Qidirish', icon: Search },
 ];
 
 export function Header() {

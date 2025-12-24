@@ -74,9 +74,11 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TRAINING_ZONES.map((zone) => (
-              <TrainingZoneCard key={zone.id} zone={zone} />
-            ))}
+            {/* Show one zone per category */}
+            {['addition', 'subtraction', 'multiplication', 'division'].map((category) => {
+              const zone = TRAINING_ZONES.find(z => z.category === category);
+              return zone ? <TrainingZoneCard key={zone.id} zone={zone} /> : null;
+            })}
           </div>
         </div>
 
