@@ -8,21 +8,14 @@ import { QuickTrainingCard } from '@/components/dashboard/QuickTrainingCard';
 import { Flame, Star, Target, Medal, TrendingUp } from 'lucide-react';
 import { MOCK_USER, MOCK_LEADERBOARD, TRAINING_ZONES } from '@/lib/constants';
 import { Link } from 'react-router-dom';
-
 const Index = () => {
-  const accuracy = Math.round((MOCK_USER.correctAnswers / MOCK_USER.totalQuestions) * 100);
-
-  return (
-    <MainLayout>
+  const accuracy = Math.round(MOCK_USER.correctAnswers / MOCK_USER.totalQuestions * 100);
+  return <MainLayout>
       <div className="flex flex-col gap-8">
         {/* Hero Section - Challenge + Leaderboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div className="md:col-span-3 lg:col-span-2">
-            <ChallengeCard
-              title="Apex Musobaqa: Tezkor Tenglamalar"
-              description="Chaqmoq tezligi va mukammal aniqlik bilan reytingda yetakchilik qiling. Har 24 soatda yangi musobaqa."
-              timeRemaining="04:32:18"
-            />
+          <div className="md:col-span-3 lg:col-span-2 my-[157px]">
+            <ChallengeCard title="Apex Musobaqa: Tezkor Tenglamalar" description="Chaqmoq tezligi va mukammal aniqlik bilan reytingda yetakchilik qiling. Har 24 soatda yangi musobaqa." timeRemaining="04:32:18" />
           </div>
           
           <div className="md:col-span-3 lg:col-span-2">
@@ -32,30 +25,10 @@ const Index = () => {
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            icon={Flame}
-            value={MOCK_USER.longestCombo}
-            label="Eng Uzun Seriya"
-            colorClass="orange"
-          />
-          <StatCard
-            icon={Star}
-            value={MOCK_USER.xp}
-            label="Jami Ball"
-            colorClass="yellow"
-          />
-          <StatCard
-            icon={Target}
-            value={`${accuracy}%`}
-            label="O'rtacha Aniqlik"
-            colorClass="purple"
-          />
-          <StatCard
-            icon={Medal}
-            value={`${MOCK_USER.level}-daraja`}
-            label="Daraja"
-            colorClass="blue"
-          />
+          <StatCard icon={Flame} value={MOCK_USER.longestCombo} label="Eng Uzun Seriya" colorClass="orange" />
+          <StatCard icon={Star} value={MOCK_USER.xp} label="Jami Ball" colorClass="yellow" />
+          <StatCard icon={Target} value={`${accuracy}%`} label="O'rtacha Aniqlik" colorClass="purple" />
+          <StatCard icon={Medal} value={`${MOCK_USER.level}-daraja`} label="Daraja" colorClass="blue" />
         </div>
 
         {/* Training Zones */}
@@ -65,20 +38,13 @@ const Index = () => {
               <TrendingUp className="size-7 text-primary" />
               Mashq Zonalari
             </h2>
-            <Link 
-              to="/zones" 
-              className="text-sm font-bold text-text-sub hover:text-primary transition-colors uppercase"
-            >
+            <Link to="/zones" className="text-sm font-bold text-text-sub hover:text-primary transition-colors uppercase">
               Barcha Zonalar
             </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Show one zone per category */}
-            {['addition', 'subtraction', 'multiplication', 'division'].map((category) => {
-              const zone = TRAINING_ZONES.find(z => z.category === category);
-              return zone ? <TrainingZoneCard key={zone.id} zone={zone} /> : null;
-            })}
+            {TRAINING_ZONES.map(zone => <TrainingZoneCard key={zone.id} zone={zone} />)}
           </div>
         </div>
 
@@ -92,8 +58,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </MainLayout>
-  );
+    </MainLayout>;
 };
-
 export default Index;
