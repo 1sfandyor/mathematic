@@ -37,7 +37,7 @@ const Index = () => {
               <span className="text-text-sub font-bold uppercase tracking-wider text-sm">{greeting.text}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
-              Matematikaga tayyor, <span className="text-primary underline decoration-4 underline-offset-4 decoration-foreground/10">{MOCK_USER.firstName}?</span>
+              Boshlashga tayyormisan, <span className="text-primary underline decoration-4 underline-offset-4 decoration-foreground/10">{MOCK_USER.firstName}?</span>
             </h1>
             <p className="text-text-sub text-lg font-medium mt-1">
               Bugun rekordingizni yangilash uchun <span className="text-yellow-500 font-bold">5 ta yulduz</span> yig'ishingiz kerak!
